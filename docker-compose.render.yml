@@ -1,0 +1,32 @@
+services:
+  openclaw:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: openclaw:latest
+    container_name: openclaw-render-test
+    command: [ "node", "dist/index.js", "gateway", "--port", "8080", "--allow-unconfigured" ]
+    ports:
+      - "8080:8080"
+    environment:
+      # Match Render blueprint exactly
+      PORT: "8080"
+      SETUP_PASSWORD: "test123"
+      OPENCLAW_STATE_DIR: "/data/.openclaw"
+      OPENCLAW_WORKSPACE_DIR: "/data/workspace"
+      OPENCLAW_GATEWAY_TOKEN: "test-gateway-token-12345"
+      NODE_ENV: "production"
+    volumes:
+      # Simulate Render's persistent disk
+      - openclaw-render-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    user: "0:0" # Run as root to avoid permission issues with /data
+
+volumes:
+  openclaw-render-data:

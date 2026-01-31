@@ -1,0 +1,116 @@
+{
+    "meta": {
+        "lastTouchedVersion": "2026.1.29",
+        "lastTouchedAt": "2026-01-31T19:57:00.000Z"
+    },
+    "models": {
+        "providers": {
+            "ollama": {
+                "baseUrl": "${OLLAMA_BASE_URL:-http://127.0.0.1:11434/v1}",
+                "apiKey": "ollama-remote",
+                "api": "openai-responses",
+                "models": [
+                    {
+                        "id": "qwen3-vl:4b",
+                        "name": "Qwen3-vl:4b",
+                        "reasoning": true,
+                        "input": [
+                            "text"
+                        ],
+                        "cost": {
+                            "input": 0,
+                            "output": 0,
+                            "cacheRead": 0,
+                            "cacheWrite": 0
+                        },
+                        "contextWindow": 200000,
+                        "maxTokens": 8192
+                    }
+                ]
+            },
+            "openai": {
+                "baseUrl": "${OLLAMA_BASE_URL:-http://127.0.0.1:11434/v1}",
+                "apiKey": "ollama-mock-key",
+                "models": []
+            }
+        }
+    },
+    "agents": {
+        "defaults": {
+            "workspace": "/root/.openclaw/workspace",
+            "maxConcurrent": 4,
+            "model": {
+                "primary": "ollama/qwen3-vl:4b"
+            },
+            "memorySearch": {
+                "provider": "openai",
+                "model": "nomic-embed-text"
+            },
+            "subagents": {
+                "maxConcurrent": 8
+            }
+        }
+    },
+    "messages": {
+        "ackReactionScope": "group-mentions"
+    },
+    "commands": {
+        "native": "auto",
+        "nativeSkills": "auto"
+    },
+    "hooks": {
+        "internal": {
+            "enabled": true,
+            "entries": {
+                "boot-md": {
+                    "enabled": true
+                },
+                "command-logger": {
+                    "enabled": true
+                },
+                "session-memory": {
+                    "enabled": true
+                }
+            }
+        }
+    },
+    "channels": {
+        "whatsapp": {
+            "dmPolicy": "allowlist",
+            "selfChatMode": true,
+            "allowFrom": [
+                "${WHATSAPP_PHONE:-+919618089879}"
+            ],
+            "groupPolicy": "allowlist",
+            "mediaMaxMb": 50,
+            "debounceMs": 0
+        }
+    },
+    "gateway": {
+        "port": 18789,
+        "mode": "local",
+        "auth": {
+            "mode": "token",
+            "token": "${GATEWAY_TOKEN:-4e8b5aa3cc3860cab2d0a2d898c8dacc6e583481d0b0ff6a}"
+        },
+        "tailscale": {
+            "mode": "off",
+            "resetOnExit": false
+        }
+    },
+    "skills": {
+        "install": {
+            "nodeManager": "npm"
+        }
+    },
+    "plugins": {
+        "entries": {
+            "whatsapp": {
+                "enabled": true
+            }
+        },
+        "slots": {
+            "memory": "memory-core"
+        }
+    }
+}
